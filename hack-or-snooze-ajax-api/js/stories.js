@@ -50,3 +50,56 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+//TODO handle clicking on the submit story href to show the form
+$("#nav-submit").on("click", (evt) => {
+  evt.preventDefault();
+  console.log("clicked");
+  $("#new-story-form").show();
+});
+
+// TODO make a handleSubmitStory()
+// async function handleSubmitStory(evt) {
+//   evt.preventDefault();
+//   console.log("submitting story");
+//   let title = $("#story-title").val();
+//   let url = $("#story-url").val();
+//   let author = $("#story-author").val();
+
+//   console.log(title, url, author);
+//   // to post a story a user must have valid credentials
+//   let username = currentUser.username;
+//   let storyValues = {
+//     title: title,
+//     author: author,
+//     url: url,
+//     username: username,
+//   };
+//   // console.log(story)
+//   try {
+//     const newStory = await storyList.addStory(currentUser, storyValues);
+//     // if a new story is successfully added to the story list
+//     // display a success message
+//     if (newStory instanceof Story) {
+//       // todo display a success message
+//       console.log("success");
+//       displayMessage("Story successfully added", "success");
+//     } else {
+//       // todo display an error message
+//       console.log("error");
+//       displayMessage("Story not added", err);
+//     }
+//   } catch (err) {
+//     // !critical will throw an error if the url is not in valid format
+//     console.log(err);
+//   }
+//   console.log("story submitted");
+//   // hide the form
+//   $newStoryForm.hide();
+//   // show the story list
+//   $allStoriesList.show();
+//   // clear the form
+//   $newStoryForm.trigger("reset");
+// }
+
+// todo handle the execution of the story submission
