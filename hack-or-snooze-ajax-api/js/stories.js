@@ -88,8 +88,3 @@ async function handleSubmitStory(evt) {
 
 $submitStory.on("click", handleSubmitStory);
 
-// TODO make a handleFavorite()
-async function handleFavorite(evt) {
-  console.debug("favorite story");
-
-}

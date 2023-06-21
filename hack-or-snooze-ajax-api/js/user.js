@@ -114,3 +114,14 @@ function updateUIOnUserLogin() {
 
   updateNavOnLogin();
 }
+
+// TODO make a handleFavorite()
+function handleFavorite(evt) {
+  console.debug("favorite story");
+  const $target = $(evt.target);
+  console.log($target);
+  //NOTE need a way to keep track of if the story is favorited or not
+  
+}
+
+$allStoriesList.on("click", ".star", handleFavorite);
