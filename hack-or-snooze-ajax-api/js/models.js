@@ -7,7 +7,6 @@ const BASE_URL = "https://hack-or-snooze-v3.herokuapp.com";
  */
 
 class Story {
-
   /** Make instance of Story from data object about story:
    *   - {title, author, url, username, storyId, createdAt}
    */
@@ -31,7 +30,6 @@ class Story {
     return url.hostname;
   }
 }
-
 
 /******************************************************************************
  * List of Story instances: used by UI to show story lists in DOM.
@@ -63,7 +61,7 @@ class StoryList {
     });
 
     // turn plain old story objects from API into instances of Story class
-    const stories = response.data.stories.map(story => new Story(story));
+    const stories = response.data.stories.map((story) => new Story(story));
 
     // build an instance of our own class using the new array of stories
     return new StoryList(stories);
@@ -76,7 +74,7 @@ class StoryList {
    * Returns the new Story instance
    */
 
-    /** Adds story data to API, makes a Story instance, adds it to story list.
+  /** Adds story data to API, makes a Story instance, adds it to story list.
    * - user - the current instance of User who will post the story
    * - obj of {title, author, url}
    *
@@ -92,21 +90,22 @@ class StoryList {
   //     "url": "http://google.com"
   //   }
   // }
-  // ?who adds the story? 
+  // ?who adds the story?
   // *user  < - > token
   // ?what is the story?
   // *title, author, url < - > new Story instance
-  async addStory(user, {title, author, url}) {
+  async addStory(user, { title, author, url }) {
     // Todo UNIMPLEMENTED: complete this function!
     // make a post request to /stories and create a new story
     // *must use token of user who is posting story*
     const token = user.loginToken;
     const response = await axios({
       method: "POST",
-      url : `${BASE_URL}/stories`,
+      url: `${BASE_URL}/stories`,
       data: {
-        token, story: {title, author, url}
-      }
+        token,
+        story: { title, author, url },
+      },
     });
     // !create a new story instance and the story list
     const story = new Story(response.data.story);
@@ -116,7 +115,6 @@ class StoryList {
     return story;
   }
 }
-
 
 /******************************************************************************
  * User: a user in the system (only used to represent the current user)
@@ -128,21 +126,17 @@ class User {
    *   - token
    */
 
-  constructor({
-                username,
-                name,
-                createdAt,
-                favorites = [],
-                ownStories = []
-              },
-              token) {
+  constructor(
+    { username, name, createdAt, favorites = [], ownStories = [] },
+    token
+  ) {
     this.username = username;
     this.name = name;
     this.createdAt = createdAt;
 
     // instantiate Story instances for the user's favorites and ownStories
-    this.favorites = favorites.map(s => new Story(s));
-    this.ownStories = ownStories.map(s => new Story(s));
+    this.favorites = favorites.map((s) => new Story(s));
+    this.ownStories = ownStories.map((s) => new Story(s));
 
     // store the login token on the user so it's easy to find for API calls.
     this.loginToken = token;
@@ -162,7 +156,7 @@ class User {
       data: { user: { username, password, name } },
     });
 
-    let { user } = response.data
+    let { user } = response.data;
 
     return new User(
       {
@@ -170,7 +164,7 @@ class User {
         name: user.name,
         createdAt: user.createdAt,
         favorites: user.favorites,
-        ownStories: user.stories
+        ownStories: user.stories,
       },
       response.data.token
     );
@@ -197,7 +191,7 @@ class User {
         name: user.name,
         createdAt: user.createdAt,
         favorites: user.favorites,
-        ownStories: user.stories
+        ownStories: user.stories,
       },
       response.data.token
     );
@@ -223,13 +217,33 @@ class User {
           name: user.name,
           createdAt: user.createdAt,
           favorites: user.favorites,
-          ownStories: user.stories
+          ownStories: user.stories,
         },
         token
       );
     } catch (err) {
       console.error("loginViaStoredCredentials failed", err);
       return null;
+    }
+  }
+  // !add a story to the user's favorites
+  async checkFavoritesJSON(currentUser) {
+    //error first handling
+    if (!currentUser) return;
+    if (!localStorage.getItem("favorites")) {
+      localStorage.setItem("favorites", JSON.stringify(this.favorites));
+    }
+    if (localStorage.getItem("favorites")) {
+      this.favorites = JSON.parse(localStorage.getItem("favorites"));
+    } else {
+      this.favorites = [];
+    }
+  }
+  //if a user is loggeg in they can favorite a story
+  addFavorite(story) {
+    //error first handling
+    if (!this.favorites.includes(story)) {
+      this.favorites.push(story);
     }
   }
 }
