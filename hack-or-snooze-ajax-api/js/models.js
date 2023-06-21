@@ -29,6 +29,7 @@ class Story {
     // *use the URL class to get the hostname from a URL*
     const url = new URL(this.url);
     return url.hostname;
+  }
 }
 
 
@@ -81,7 +82,6 @@ class StoryList {
    *
    * Returns the new Story instance
    */
-
   //! to limit hardcoding pass params to the method
   // hidden an example of the format of the data that should be sent in the request body
   // {
@@ -114,10 +114,7 @@ class StoryList {
     this.stories.unshift(story);
     user.ownStories.unshift(story);
     return story;
-   
-    // make a new story instance
   }
-
 }
 
 
