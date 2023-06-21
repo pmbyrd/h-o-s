@@ -25,7 +25,8 @@ function generateStoryMarkup(story) {
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-        <a href="${story.url}" target="a_blank" class="story-link">
+      <a href="#" class="star"> <i data-story-id="${story.storyId}" class="far fa-star"></i></a>
+      <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
@@ -87,4 +88,8 @@ async function handleSubmitStory(evt) {
 
 $submitStory.on("click", handleSubmitStory);
 
-// todo handle the execution of the story submission
+// TODO make a handleFavorite()
+async function handleFavorite(evt) {
+  console.debug("favorite story");
+
+}
