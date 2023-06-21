@@ -29,6 +29,7 @@ class Story {
     // *use the URL class to get the hostname from a URL*
     const url = new URL(this.url);
     return url.hostname;
+  }
 }
 
 

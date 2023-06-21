@@ -69,6 +69,7 @@ async function handleSubmitStory(evt) {
   //NOTE - To post a story use the StoryList.addStory() method
   try {
     const newStory = await storyList.addStory(currentUser, storyValues);
+    const ownStory = currentUser.ownStories;
     if (newStory instanceof Story) {
       console.log("success");
       currentUser.ownStories.push(newStory);
