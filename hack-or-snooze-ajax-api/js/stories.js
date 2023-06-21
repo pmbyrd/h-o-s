@@ -51,55 +51,40 @@ function putStoriesOnPage() {
   $allStoriesList.show();
 }
 
-//TODO handle clicking on the submit story href to show the form
-$("#nav-submit").on("click", (evt) => {
-  evt.preventDefault();
-  console.log("clicked");
-  $("#new-story-form").show();
-});
-
 // TODO make a handleSubmitStory()
-// async function handleSubmitStory(evt) {
-//   evt.preventDefault();
-//   console.log("submitting story");
-//   let title = $("#story-title").val();
-//   let url = $("#story-url").val();
-//   let author = $("#story-author").val();
+async function handleSubmitStory(evt) {
+  evt.preventDefault();
+  console.debug("submitting story");
+  const title = $("#story-title").val();
+  const url = $("#story-url").val();
+  const author = $("#story-author").val();
+  const username = currentUser.username;
+  const storyValues = {
+    title: title,
+    author: author,
+    url: url,
+    username: username,
+  };
+  console.table(storyValues);
+  //NOTE - To post a story use the StoryList.addStory() method
+  try {
+    const newStory = await storyList.addStory(currentUser, storyValues);
+    if (newStory instanceof Story) {
+      console.log("success");
+      // displayMessage("Story successfully added", "success");
+    } else {
+      console.log("error");
+      displayMessage("Story not added", err);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  console.log("story submitted");
+  $newStoryForm.hide();
+  $allStoriesList.show();
+  $newStoryForm.trigger("reset");
+}
 
-//   console.log(title, url, author);
-//   // to post a story a user must have valid credentials
-//   let username = currentUser.username;
-//   let storyValues = {
-//     title: title,
-//     author: author,
-//     url: url,
-//     username: username,
-//   };
-//   // console.log(story)
-//   try {
-//     const newStory = await storyList.addStory(currentUser, storyValues);
-//     // if a new story is successfully added to the story list
-//     // display a success message
-//     if (newStory instanceof Story) {
-//       // todo display a success message
-//       console.log("success");
-//       displayMessage("Story successfully added", "success");
-//     } else {
-//       // todo display an error message
-//       console.log("error");
-//       displayMessage("Story not added", err);
-//     }
-//   } catch (err) {
-//     // !critical will throw an error if the url is not in valid format
-//     console.log(err);
-//   }
-//   console.log("story submitted");
-//   // hide the form
-//   $newStoryForm.hide();
-//   // show the story list
-//   $allStoriesList.show();
-//   // clear the form
-//   $newStoryForm.trigger("reset");
-// }
+$submitStory.on("click", handleSubmitStory);
 
 // todo handle the execution of the story submission
