@@ -114,3 +114,14 @@ function updateUIOnUserLogin() {
 
   updateNavOnLogin();
 }
+
+//TODO add a functionality to add a favorite story
+function addFavoriteStory(evt) {
+  console.debug("addFavoriteStory", evt);
+  evt.preventDefault();
+  const storyId = $(evt.target).closest("li").attr("id");
+  currentUser.addFavoriteStory(storyId);
+}
+
+$allStoriesList.on("click", ".star", addFavoriteStory);
+//TODO add a functionality to remove a favorite story
