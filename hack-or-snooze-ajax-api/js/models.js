@@ -114,6 +114,31 @@ class StoryList {
     user.ownStories.unshift(story);
     return story;
   }
+
+  // async removeStory(user, storyId) {
+  //   //reverse of addStory
+  //   try {
+  //     const token = user.loginToken;
+  //     const response = await axios({
+  //       method: "DELETE",
+  //       url: `${BASE_URL}/stories/${storyId}`,
+  //       data: { token },
+  //     });
+  //     this.stories = this.stories.filter((story) => story.storyId !== storyId);
+  //     user.ownStories = user.ownStories.filter(
+  //       (story) => story.storyId !== storyId
+  //     );
+  //     if (user.favorites.find((s) => s.storyId === storyId)) {
+  //       user.favorites = user.favorites.filter(
+  //         (story) => story.storyId !== storyId
+  //       );
+  //       user.favorites.pop(storyId);
+  //     }
+  //     user.ownStories.pop(storyId);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 }
 
 /******************************************************************************
@@ -227,7 +252,7 @@ class User {
     }
   }
   // !add a story to the user's favorites
-  async checkFavoritesJSON(currentUser) {
+  async checkFavoritesJSON() {
     //error first handling
     if (!currentUser) return;
     if (!localStorage.getItem("favorites")) {
@@ -239,11 +264,48 @@ class User {
       this.favorites = [];
     }
   }
-  //if a user is loggeg in they can favorite a story
-  addFavorite(story) {
-    //error first handling
-    if (!this.favorites.includes(story)) {
-      this.favorites.push(story);
+
+  async addFavorite(story) {
+    this.favorites.push(story);
+    localStorage.setItem("favorites", JSON.stringify(this.favorites));
+    //must make the call to the API to update the state of the user's favorites
+    await this.updateFavorites(story);
+  }
+
+  async removeFavorite(story) {
+    this.favorites = this.favorites.filter((s) => s.storyId !== story.storyId);
+    localStorage.setItem("favorites", JSON.stringify(this.favorites));
+    await this.updateFavoritesRemove(story);
+  }
+
+  //Make a call to the API to update the state of the stories and weather they are favorited or not
+  async updateFavorites(story) {
+    const token = this.loginToken;
+    try {
+      const response = await axios({
+        method: "POST",
+        url: `${BASE_URL}/users/${this.username}`,
+        params: { token },
+      });
+      this.favorites = response.data.user.favorites;
+      localStorage.setItem("favorites", JSON.stringify(this.favorites));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async updateFavoritesRemove(story) {
+    const token = this.loginToken;
+    try {
+      const response = await axios({
+        method: "DELETE",
+        url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+        params: { token },
+      });
+      this.favorites = response.data.user.favorites;
+      localStorage.setItem("favorites", JSON.stringify(this.favorites));
+    } catch (error) {
+      console.log(error);
     }
   }
 }
