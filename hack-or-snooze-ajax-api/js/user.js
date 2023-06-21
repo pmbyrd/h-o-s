@@ -115,13 +115,13 @@ function updateUIOnUserLogin() {
   updateNavOnLogin();
 }
 
-// TODO make a handleFavorite()
-function handleFavorite(evt) {
-  console.debug("favorite story");
-  const $target = $(evt.target);
-  console.log($target);
-  //NOTE need a way to keep track of if the story is favorited or not
-  
+//TODO add a functionality to add a favorite story
+function addFavoriteStory(evt) {
+  console.debug("addFavoriteStory", evt);
+  evt.preventDefault();
+  const storyId = $(evt.target).closest("li").attr("id");
+  currentUser.addFavoriteStory(storyId);
 }
 
-$allStoriesList.on("click", ".star", handleFavorite);
+$allStoriesList.on("click", ".star", addFavoriteStory);
+//TODO add a functionality to remove a favorite story
