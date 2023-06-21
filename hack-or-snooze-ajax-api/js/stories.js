@@ -71,10 +71,7 @@ async function handleSubmitStory(evt) {
     const newStory = await storyList.addStory(currentUser, storyValues);
     if (newStory instanceof Story) {
       console.log("success");
-      // displayMessage("Story successfully added", "success");
-    } else {
-      console.log("error");
-      displayMessage("Story not added", err);
+      currentUser.ownStories.push(newStory);
     }
   } catch (err) {
     console.log(err);
