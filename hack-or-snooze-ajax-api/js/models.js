@@ -252,34 +252,20 @@ class User {
       return null;
     }
   }
-  // !add a story to the user's favorites
-  async checkFavoritesJSON() {
-    //error first handling
-    if (!currentUser) return;
-    if (!localStorage.getItem("favorites")) {
-      localStorage.setItem("favorites", JSON.stringify(this.favorites));
-    }
-    if (localStorage.getItem("favorites")) {
-      this.favorites = JSON.parse(localStorage.getItem("favorites"));
-    } else {
-      this.favorites = [];
-    }
-  }
+ 
 
   async addFavorite(story) {
     this.favorites.push(story);
-    localStorage.setItem("favorites", JSON.stringify(this.favorites));
     //must make the call to the API to update the state of the user's favorites
     await this.updateFavorites(story);
   }
 
   async removeFavorite(story) {
     this.favorites = this.favorites.filter((s) => s.storyId !== story.storyId);
-    localStorage.setItem("favorites", JSON.stringify(this.favorites));
     await this.updateFavoritesRemove(story);
   }
 
-  //Make a call to the API to update the state of the stories and weather they are favorited or not
+ //favorites can be saved to the API and retrieved from the API
   async updateFavorites(story) {
     const token = this.loginToken;
     try {
@@ -289,7 +275,6 @@ class User {
         params: { token },
       });
       this.favorites = response.data.user.favorites;
-      localStorage.setItem("favorites", JSON.stringify(this.favorites));
     } catch (error) {
       console.log(error);
     }
@@ -304,7 +289,6 @@ class User {
         params: { token },
       });
       this.favorites = response.data.user.favorites;
-      localStorage.setItem("favorites", JSON.stringify(this.favorites));
     } catch (error) {
       console.log(error);
     }
