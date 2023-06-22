@@ -115,32 +115,33 @@ class StoryList {
     return story;
   }
 
-  // async removeStory(user, storyId) {
-  //   //reverse of addStory
-  //   try {
-  //     const token = user.loginToken;
-  //     const response = await axios({
-  //       method: "DELETE",
-  //       url: `${BASE_URL}/stories/${storyId}`,
-  //       data: { token },
-  //     });
-  //     this.stories = this.stories.filter((story) => story.storyId !== storyId);
-  //     user.ownStories = user.ownStories.filter(
-  //       (story) => story.storyId !== storyId
-  //     );
-  //     if (user.favorites.find((s) => s.storyId === storyId)) {
-  //       user.favorites = user.favorites.filter(
-  //         (story) => story.storyId !== storyId
-  //       );
-  //       user.favorites.pop(storyId);
-  //     }
-  //     user.ownStories.pop(storyId);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  async removeStory(user, storyId) {
+    //reverse of addStory
+    const token = user.loginToken;
+    try {
+      const response = await axios({
+        url: `${BASE_URL}/stories/${storyId}`,
+        method: "DELETE",
+        data: {
+          token,
+        },
+      });
+      console.log(response);
+      //remove story from story list
+      this.stories = this.stories.filter((story) => story.storyId !== storyId);
+      //remove story from user's own stories
+      user.ownStories = user.ownStories.filter(
+        (story) => story.storyId !== storyId
+      );
+      //remove story from user's favorites
+      user.favorites = user.favorites.filter(
+        (story) => story.storyId !== storyId
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
-
 /******************************************************************************
  * User: a user in the system (only used to represent the current user)
  */

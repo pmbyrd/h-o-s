@@ -20,8 +20,7 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
-
+  console.debug("generateStoryMarkup", story);
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
@@ -33,6 +32,7 @@ function generateStoryMarkup(story) {
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
       </li>
+      <i data-story-id="${story.storyId}" class="fas fa-trash-alt"></i>
     `);
 }
 
@@ -52,7 +52,6 @@ function putStoriesOnPage() {
   $allStoriesList.show();
 }
 
-// TODO make a handleSubmitStory()
 async function handleSubmitStory(evt) {
   evt.preventDefault();
   console.debug("submitting story");
@@ -85,4 +84,19 @@ async function handleSubmitStory(evt) {
 }
 
 $submitStory.on("click", handleSubmitStory);
+
+// TODO make a handleDeleteStory()
+async function handleDeleteStory(evt) {
+  evt.preventDefault();
+  console.debug("deleting story");
+  const storyId = $(evt.target).attr("data-story-id");
+  console.log(storyId);
+  if (storyId) {
+    await storyList.removeStory(currentUser, storyId);
+  }
+}
+
+$allStoriesList.on("click", ".fa-trash-alt", handleDeleteStory);
+
+
 

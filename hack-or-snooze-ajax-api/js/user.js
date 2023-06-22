@@ -140,32 +140,13 @@ function addFavoriteStory(evt) {
   }
   console.table(currentUser.favorites);
 }
-// function addFavoriteStory(evt) {
-//   console.debug("addFavoriteStory", evt);
-//   evt.preventDefault();
-//   const $target = $(evt.target);
-//   const $closestLi = $target.closest("li");
-//   const storyId = $closestLi.attr("id");
- 
-//   const story = getStoryInfo(storyId);
-//   if ($target.hasClass("far")) {
-//     console.log("adding favorite");
-//     $target.closest("i").toggleClass("far fas");
-//     currentUser.addFavorite(story);
-//   } else {
-//     console.log("removing favorite");
-//     $target.closest("i").toggleClass("far fas");
-//   }
-// }
+
 
 function getStoryInfo(storyId) {
   console.debug("getStoryInfo", storyId);
   const story = storyList.stories.find((s) => s.storyId === storyId);
   return story;
 }
-
-
-//TODO a function that saves the user's favorite stories to the 
 
 
 $allStoriesList.on("click", ".star", addFavoriteStory);
